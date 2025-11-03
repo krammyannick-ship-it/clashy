@@ -23,14 +23,12 @@ document.addEventListener('DOMContentLoaded', function () {
       sorted = cards.sort((a, b) => (a.dataset.name || '').localeCompare(b.dataset.name || '', undefined, { sensitivity: 'base' }));
     }
 
-    // detach and re-append in sorted order
     const fragment = document.createDocumentFragment();
     sorted.forEach(c => fragment.appendChild(c));
     grid.innerHTML = '';
     grid.appendChild(fragment);
   }
 
-  // Populate any missing stat-values from data-attributes (if placeholders exist)
   getCards().forEach(card => {
     const win = card.dataset.win;
     const usage = card.dataset.usage;
@@ -46,13 +44,12 @@ document.addEventListener('DOMContentLoaded', function () {
       sortCards(e.target.value);
     });
 
-    // initial for other pages that use this select
+
     sortCards(sortSelect.value || 'alpha');
   }
 
-  // --- Esports page: sorting by year, preisgeld, zuschauer ---
+
   if (sortSelectEsports) {
-    // Parse euro strings like "170.000€" -> 170000 (integer)
     const parseEuro = (txt) => {
       if (!txt) return 0;
       // keep only digits
@@ -60,8 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!digits) return 0;
       return parseInt(digits, 10);
     };
-
-    // Helper: find a stat's value by matching its label text (case-insensitive)
     const getStatText = (card, match) => {
       const stats = Array.from(card.querySelectorAll('.stat'));
       match = (match || '').toString().toLowerCase();
@@ -86,13 +81,10 @@ document.addEventListener('DOMContentLoaded', function () {
       const cards = getCards();
       let sorted = cards.slice();
       if (mode === 'year') {
-        // newest first (desc)
         sorted.sort((a,b) => parseInt(b.dataset.year || '0',10) - parseInt(a.dataset.year || '0',10));
       } else if (mode === 'preisgeld') {
-        // highest prize first — find by label (e.g. "Preisgeld")
         sorted.sort((a,b) => parseEuro(getStatText(b, 'preis')) - parseEuro(getStatText(a, 'preis')));
       } else if (mode === 'zuschauer') {
-        // highest viewers first — match labels containing "zuschauer" or "peak"
         sorted.sort((a,b) => parseZuschauer(getStatText(b, 'zuschauer') || getStatText(b, 'peak')) - parseZuschauer(getStatText(a, 'zuschauer') || getStatText(a, 'peak')));
       }
 
@@ -101,13 +93,8 @@ document.addEventListener('DOMContentLoaded', function () {
       grid.innerHTML = '';
       grid.appendChild(frag);
     }
-
-    // wire up
     sortSelectEsports.addEventListener('change', (e) => sortEsports(e.target.value));
-    // default sort state (year newest first)
     sortEsports(sortSelectEsports.value || 'year');
 
   }
-
-  // SuperStore CTA is always visible; no scroll handler needed.
 });
