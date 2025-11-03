@@ -244,6 +244,22 @@ body {
 }
 .card-stats .stat-value {
   font-weight: 700;
+
+/* Kontakt-E-Mail rechts unten im Gameplay-Erklärungs-Block */
+.contact-email {
+  text-align: right;
+  margin-top: 12px;
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+.contact-email a {
+  color: #ffd700;
+  text-decoration: none;
+  font-weight: 700;
+}
+.contact-email a:hover {
+  text-decoration: underline;
+}
   color: #222;
 }
 
